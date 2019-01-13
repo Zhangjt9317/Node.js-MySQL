@@ -37,3 +37,18 @@ This means updating the SQL database to reflect the remaining quantity.
 Once the update goes through, show the customer the total cost of their purchase.
 
 If this activity took you between 8-10 hours, then you've put enough time into this assignment. Feel free to stop here -- unless you want to take on the next challenge.
+
+### Installation
+The following packages can be installed using the command [npm](https://docs.npmjs.com/):
+
+* mysql
+* inquirer
+
+### Demo
+The following gifs present how this app works:
+
+when there is an insuffient supply of certain product:
+![insufficient-supply](./demo/insufficient-supply.gif)
+
+for normal trading:
+![normal](./demo/normal.gif)
