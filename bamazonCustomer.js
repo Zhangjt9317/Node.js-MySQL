@@ -1,6 +1,7 @@
 // import packages 
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var table = require("cli-table");
 
 // Create the Connection to the DB //
 var connection = mysql.createConnection({
@@ -17,13 +18,13 @@ connection.connect(function (err) {
     if (err) {
         throw error;
     } else {
-        showproduct();
+        display();
     }
 });
 
 //function to display items for sale on the console
-function showproduct() {
-    connection.query('SELECT * FROM bamazon_DB.product', function (err, res) {
+function display() {
+    connection.query('SELECT * FROM product', function (err, res) {
         if (err) {
             throw error;
         } else {
@@ -40,15 +41,17 @@ function showproduct() {
 
 // function to prompt user  on what they would like to do
 function start() {
-    connection.query("SELECT * FROM bamazon_DB.product", function (err, res) {
+    connection.query("SELECT * FROM product", function (err, res) {
         if (err) {
             throw error;
         } else {
             inquirer.prompt([
                 {
-                    name: 'selectedID',
+                    name: 'enteredID',
                     type: 'input',
-                    message: 'Enter the ID for product you wish to purchase:',
+                    message: 'Enter the ID for product you wish to purchase: ',
+
+                    // validate the value input
                     validate: function (value) {
                         if (isNaN(value) === false) {
                             return true;
@@ -63,6 +66,8 @@ function start() {
                     type: 'input',
                     message: 'How many would you like?',
                     validate: function (value) {
+
+                        // validate the number input 
                         if (isNaN(value) === false) {
                             return true;
                         }
@@ -71,27 +76,30 @@ function start() {
 
                 }
             ]).then(function (answers) {
-                var query = "SELECT * FROM bamazon_DB.product WHERE ?";
-                connection.query(query, { id: answers.selectedID }, function (err, res) {
-                    if (err) {
-                        throw error;
-                    }
+                var query = "SELECT * FROM product WHERE ?";
+                connection.query(query, { id: answers.enteredID },
+                    function (err, res) {
+                        if (err) {
+                            throw error;
+                        }
 
-                    // get the information of the chosen item, set input to variables, pass variables as Parameters
-                    var stock = res[0].stock_quantity;
-                    var itemBought = answers.amountBought;
+                        // get the information of the chosen item, set input to variables, pass variables as Parameters
+                        var stock = res[0].stock_quantity;
+                        var itemBought = answers.amountBought;
 
-                    if (stock >= itemBought) {
-                        var leftstock = stock - itemBought;
+                        if (stock >= itemBought) {
+                            var leftstock = stock - itemBought;
 
-                        var totalPrice = res[0].price * itemBought;
-                        var itemPurchased = res[0].product;
+                            var totalPrice = res[0].price * itemBought;
+                            var itemPurchased = res[0].product;
 
-                        console.log(totalPrice + " total price of items bought");
+                            console.log("total price of items bought: " + totalPrice);
 
-                        connection.query(
-                            "UPDATE bamazon_DB.product SET ? WHERE ?", [
-                                { stock_quantity: leftstock }, { item_id: answers.selectedID }], function (err) {
+                            connection.query(
+                                "UPDATE product SET ? WHERE ?", [
+                                    { stock_quantity: leftstock }, { item_id: answers.enteredID }
+                                ],
+                                function (err, res) {
                                     if (err) {
                                         throw error;
                                     } else {
@@ -100,28 +108,26 @@ function start() {
                                         console.log("\n\r");
                                         console.log("Order details:");
                                         console.log("Item(s) purchased: " + itemPurchased);
-                                        console.log("quantity purchased: " + itemBought + " @ $" + res[0].price);
-                                        console.log("Total Cost: $" + totalPrice);
+                                        console.log("amount purchased: " + itemBought + " at price each of $" + res[0].price);
+                                        console.log("Total price: $" + totalPrice);
                                         console.log("\n\r");
-                                        console.log("Thank you for shopping at-fell off the truck online-");
                                         console.log("==============================================");
-                                        showproduct();
+                                        display();
                                     }
                                 }
-                        );
-                    } else {
-                        console.log("==============================================");
-                        console.log("\n\r");
-                        console.log("Insuffcient quantity, please select another amount");
-                        console.log("\n\r");
-                        console.log("==============================================");
-                        showproduct();
-                    }
+                            );
+                        } else {
+                            console.log("==============================================");
+                            console.log("\n\r");
+                            console.log("Insuffcient quantity, please select another amount");
+                            console.log("\n\r");
+                            console.log("==============================================");
+                            display();
+                        }
 
-                });
+                    });
 
             });
         }
     });
-
 }

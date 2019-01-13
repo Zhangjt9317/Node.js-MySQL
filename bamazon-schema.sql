@@ -9,7 +9,7 @@ USE bamazon_DB;
 
 -- create the mysql table --
 CREATE TABLE product(
-	-- item_item_item_id 
+	-- ID of one item --
 	item_id INTEGER NOT NULL AUTO_INCREMENT,
     -- product names -- 
 	product_name VARCHAR(100) NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE product(
     -- price of the product --
     price DECIMAL(10,2) NULL,
     -- stock left for this product --
-    stock_quantity INT NULL,
+    stock_quantity INTEGER NULL,
     
-    -- primary key --
+    -- primary key set to be the item ID --
     PRIMARY KEY (item_id)
 );
 
