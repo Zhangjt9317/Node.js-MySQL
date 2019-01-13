@@ -1,0 +1,27 @@
+{
+  "name": "Node.js-MySQL",
+  "version": "1.0.0",
+  "description": "In this activity, the goal is to create an Amazon-like storefront with the MySQL skills you learnd this unit. The app will take orders from customers and deplete stock from the store's inventory. As a bonus task, you can program your app to track product sales across your store's departments and then provide a summary of the highest-grossing deparments in the store.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhangjt9317/Node.js-MySQL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zhangjt9317/Node.js-MySQL/issues"
+  },
+  "homepage": "https://github.com/Zhangjt9317/Node.js-MySQL#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "inquirer": "^6.2.1",
+    "mysql": "^2.16.0",
+    "start": "^5.1.0"
+  }
+}
