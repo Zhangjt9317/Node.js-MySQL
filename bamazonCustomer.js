@@ -1,7 +1,7 @@
-// import packages 
+// import packages
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var table = require("cli-table");
+
 
 // Create the Connection to the DB //
 var connection = mysql.createConnection({
@@ -15,44 +15,40 @@ var connection = mysql.createConnection({
 
 // Connect to SQL server and SQL DB
 connection.connect(function (err) {
-    if (err) {
-        throw error;
-    } else {
-        display();
-    }
+    if (err) { throw err; }
+
+    // run start function after connection is made to prompt user
+    showproduct_names();
 });
 
+
 //function to display items for sale on the console
-function display() {
+function showproduct_names() {
     connection.query('SELECT * FROM product', function (err, res) {
-        if (err) {
-            throw error;
-        } else {
-            for (var i = 0; i < res.length; i++) {
-                console.log('ID: ' + res[i].item_id + '  Product: ' + res[i].product_name + '  Department: ' + res[i].department_name);
-                console.log('Price: ' + res[i].price + '  Amount Left: ' + res[i].stock_quantity);
-                console.log('===================================================================');
-            }
-            //call function to start the user prompt for shopping//
-            start();
+        if (err) throw err;
+
+        for (var i = 0; i < res.length; i++) {
+            console.log('Item : ' + res[i].item_id + ' product : ' + res[i].product_name + ' department: ' + res[i].department_name);
+            console.log('price : ' + res[i].price + ' quantity Left : ' + res[i].stock_quantity);
+            console.log(' ');
+
         }
+        //call function to start the user prompt 
+        start();
     });
 }
 
-// function to prompt user  on what they would like to do
+// starting
 function start() {
     connection.query("SELECT * FROM product", function (err, res) {
-        if (err) {
-            throw error;
-        } else {
-            inquirer.prompt([
+        if (err) throw console.log("connection error:" + err);
+        inquirer
+            .prompt([
                 {
-                    name: 'enteredID',
+                    name: 'select_id',
                     type: 'input',
-                    message: 'Enter the ID for product you wish to purchase: ',
-
-                    // validate the value input
-                    validate: function (value) {
+                    message: 'Enter the ID of a product you wish to purchase:',
+                    valitem_idate: function (value) {
                         if (isNaN(value) === false) {
                             return true;
                         }
@@ -64,10 +60,8 @@ function start() {
                 {
                     name: 'amountBought',
                     type: 'input',
-                    message: 'How many would you like?',
-                    validate: function (value) {
-
-                        // validate the number input 
+                    message: 'How much do you want?',
+                    valitem_idate: function (value) {
                         if (isNaN(value) === false) {
                             return true;
                         }
@@ -75,59 +69,63 @@ function start() {
                     }
 
                 }
+
             ]).then(function (answers) {
                 var query = "SELECT * FROM product WHERE ?";
-                connection.query(query, { id: answers.enteredID },
-                    function (err, res) {
-                        if (err) {
-                            throw error;
-                        }
+                connection.query(query, {
+                    item_id: answers.select_id
+                }, function (err, res) {
+                    if(err) throw err;
 
-                        // get the information of the chosen item, set input to variables, pass variables as Parameters
-                        var stock = res[0].stock_quantity;
-                        var itemBought = answers.amountBought;
+                    var inStock = res[0].stock_quantity;
+                    var itemBought = answers.amountBought;
 
-                        if (stock >= itemBought) {
-                            var leftstock = stock - itemBought;
+                    if (inStock >= itemBought) {
+                        var leftInStock = inStock - itemBought;
+                        var totalPrice = res[0].price * itemBought;
+                        var itemPurchased = res[0].product_name;
 
-                            var totalPrice = res[0].price * itemBought;
-                            var itemPurchased = res[0].product;
+                        console.log("Total price of items bought: " + totalPrice);
 
-                            console.log("total price of items bought: " + totalPrice);
+                        connection.query(
+                            "UPDATE product SET ? WHERE ?", [
+                                {
+                                    stock_quantity: leftInStock
 
-                            connection.query(
-                                "UPDATE product SET ? WHERE ?", [
-                                    { stock_quantity: leftstock }, { item_id: answers.enteredID }
-                                ],
-                                function (err, res) {
-                                    if (err) {
-                                        throw error;
-                                    } else {
-                                        console.log(price, amountBought);
-                                        console.log("==============================================");
-                                        console.log("\n\r");
-                                        console.log("Order details:");
-                                        console.log("Item(s) purchased: " + itemPurchased);
-                                        console.log("amount purchased: " + itemBought + " at price each of $" + res[0].price);
-                                        console.log("Total price: $" + totalPrice);
-                                        console.log("\n\r");
-                                        console.log("==============================================");
-                                        display();
-                                    }
+                                },
+                                {
+                                    item_id: answers.select_id
                                 }
-                            );
-                        } else {
-                            console.log("==============================================");
-                            console.log("\n\r");
-                            console.log("Insuffcient quantity, please select another amount");
-                            console.log("\n\r");
-                            console.log("==============================================");
-                            display();
-                        }
 
-                    });
+                            ],
+                            function (error) {
+                                //                            console.log(price, amountBought);
+                                if (error) throw err;
+                                console.log("==============================================");
+                                console.log("\n\r");
+                                console.log("Order details:");
+                                console.log("Item(s) purchased: " + itemPurchased);
+                                console.log("quantity purchased: " + itemBought + " @ $" + res[0].price);
+                                console.log("Total Cost: $" + totalPrice);
+                                console.log("\n\r");
+                                console.log("Thank you for visiting");
+                                console.log("==============================================");
+                                showproduct_names();
+
+                            }
+                        );
+                    } else {
+                        console.log("==============================================");
+                        console.log("\n\r");
+                        console.log("Insufficient Supply, Please Select the Other Amount");
+                        console.log("\n\r");
+                        console.log("==============================================");
+                        showproduct_names();
+
+                    }
+
+                });
 
             });
-        }
     });
 }
