@@ -38,8 +38,14 @@ Once the update goes through, show the customer the total cost of their purchase
 
 If this activity took you between 8-10 hours, then you've put enough time into this assignment. Feel free to stop here -- unless you want to take on the next challenge.
 
-### Installation
-The following packages can be installed using the command [npm](https://docs.npmjs.com/):
+### Installation and Download Requirements
+
+The package can be downloaded or cloned to the local address using git:
+```
+git clone https://github.com/Zhangjt9317/Node.js-MySQL.git
+```
+
+After downloading the package, the following npm packages can be installed using the command [npm](https://docs.npmjs.com/):
 
 * mysql
 * inquirer
