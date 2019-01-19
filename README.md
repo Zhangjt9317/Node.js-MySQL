@@ -67,9 +67,9 @@ node bamazonCustomer.js
 
 The command will ask for an itemID listed in the list of items presented (as shown in the gif below). Then it will ask you for a quantity, and if the quantity surpasses the stock, an error message will be displayed. Otherwise, a message will show up implying the transaction is done and how much money you have spent for the quantity of goods.
 
-** The goods in the SQL file can be changed at anytime ** 
+**The goods in the SQL file can be changed at anytime** 
 
-The following gifs present how this app works:
+***The following gifs present how this app works:***
 
 for initiating the node and displaying the list of items owned:
 ![normal](./demo/display-stock.gif)
