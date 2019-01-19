@@ -36,6 +36,8 @@ However, if your store does have enough of the product, you should fulfill the c
 This means updating the SQL database to reflect the remaining quantity.
 Once the update goes through, show the customer the total cost of their purchase.
 
+**The goods in the SQL database can be changed at anytime** 
+
 If this activity took you between 8-10 hours, then you've put enough time into this assignment. Feel free to stop here -- unless you want to take on the next challenge.
 
 ### Installation and Download Requirements
@@ -66,8 +68,6 @@ node bamazonCustomer.js
 ```
 
 The command will ask for an itemID listed in the list of items presented (as shown in the gif below). Then it will ask you for a quantity, and if the quantity surpasses the stock, an error message will be displayed. Otherwise, a message will show up implying the transaction is done and how much money you have spent for the quantity of goods.
-
-**The goods in the SQL file can be changed at anytime** 
 
 ***The following gifs present how this app works:***
 

@@ -7,7 +7,6 @@ var inquirer = require("inquirer");
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
-
     user: "root",
     password: "password",
     database: "bamazon_DB"
@@ -75,7 +74,7 @@ function start() {
                 connection.query(query, {
                     item_id: answers.select_id
                 }, function (err, res) {
-                    if(err) throw err;
+                    if (err) throw err;
 
                     var inStock = res[0].stock_quantity;
                     var itemBought = answers.amountBought;
