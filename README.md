@@ -41,20 +41,41 @@ If this activity took you between 8-10 hours, then you've put enough time into t
 ### Installation and Download Requirements
 
 The package can be downloaded or cloned to the local address using git:
+
 ```
 git clone https://github.com/Zhangjt9317/Node.js-MySQL.git
 ```
 
 After downloading the package, the following npm packages can be installed using the command [npm](https://docs.npmjs.com/):
 
+```
+npm download
+```
+
+Two npm pakcages are required in this assignment and included in this package:
+
 * mysql
 * inquirer
 
-### Demo
+### Demo and Usage
+
+Using node to initiate the command:
+
+```
+node bamazonCustomer.js
+```
+
+The command will ask for an itemID listed in the list of items presented (as shown in the gif below). Then it will ask you for a quantity, and if the quantity surpasses the stock, an error message will be displayed. Otherwise, a message will show up implying the transaction is done and how much money you have spent for the quantity of goods.
+
+** The goods in the SQL file can be changed at anytime ** 
+
 The following gifs present how this app works:
+
+for initiating the node and displaying the list of items owned:
+![normal](./demo/display-stock.gif)
+
+for selecting the itemID and quantity for normal trading:
+![normal](./demo/normal.gif)
 
 when there is an insuffient supply of certain product:
 ![insufficient-supply](./demo/insufficient-supply.gif)
-
-for normal trading:
-![normal](./demo/normal.gif)
